@@ -1,7 +1,14 @@
 import React from "react";
+import Navbar from "./navbar/Navbar";
+import Mainbanner from "./body/banners/Mainbanner";
 
 const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div>
+      <Navbar />
+      <Mainbanner />
+    </div>
+  );
 };
 
 export default Home;
