@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
   const productsPerPage = 12;
   const navigate = useNavigate();
 
@@ -35,14 +37,39 @@ const Products = () => {
   // Handle page change
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Handle adding product to cart
-  const handleAddToCart = () => {
+  const handleAddToCart = (productId) => {
     const username = localStorage.getItem("username");
     if (!username) {
       navigate("/register"); // Redirect to register if username is not found
     } else {
-      // Logic to add product to cart can be added here
-      alert("Product added to cart!"); // Placeholder alert
+      // Get the current time
+      const currentTime = new Date().getTime();
+
+      // Get cart data and timestamp from local storage
+      const cartData = JSON.parse(localStorage.getItem(username)) || {};
+      const { cart = [], timestamp = currentTime } = cartData;
+
+      // Check if 10 minutes have passed
+      const tenMinutes = 10 * 60 * 1000; // 10 minutes in milliseconds
+      if (currentTime - timestamp > tenMinutes) {
+        // Remove data if time has passed
+        localStorage.removeItem(username);
+        cart.length = 0; // Clear the cart array
+      }
+
+      // Add product to cart
+      cart.push(productId);
+
+      // Update the cart data and timestamp in local storage
+      localStorage.setItem(
+        username,
+        JSON.stringify({ cart, timestamp: currentTime })
+      );
+
+      // Show notification
+      setNotificationMessage("Product added to cart");
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000); // Hide notification after 3 seconds
     }
   };
 
@@ -83,7 +110,7 @@ const Products = () => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent click from bubbling up to the card
-                    handleAddToCart(); // Call handleAddToCart on click
+                    handleAddToCart(p.id); // Call handleAddToCart with product ID
                   }}
                   className="px-2 py-1 text-xs font-semibold text-gray-900 uppercase transition-colors duration-300 transform bg-white rounded hover:bg-gray-200 focus:bg-gray-400 focus:outline-none"
                 >
@@ -130,6 +157,31 @@ const Products = () => {
             Next
           </button>
         </div>
+
+        {/* Notification */}
+        {showNotification && (
+          <div className="fixed top-4 right-4 w-full max-w-sm bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <div className="flex items-center justify-center w-12 bg-green-500">
+              <svg
+                className="w-6 h-6 text-white fill-current"
+                viewBox="0 0 40 40"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z" />
+              </svg>
+            </div>
+            <div className="px-4 py-2 -mx-3">
+              <div className="mx-3">
+                <span className="font-semibold text-green-500 dark:text-green-400">
+                  Success
+                </span>
+                <p className="text-sm text-gray-600 dark:text-gray-200">
+                  {notificationMessage}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

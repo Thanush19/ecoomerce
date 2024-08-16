@@ -4,7 +4,7 @@ import Mainbanner from "../body/banners/Mainbanner";
 import Products from "../body/produts/Products";
 const Home = () => {
   return (
-    <div>
+    <div className="">
       <Navbar />
       <Mainbanner />
       {/* <ProductList /> */}

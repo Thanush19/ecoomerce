@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaFacebook, FaGithub, FaReddit } from "react-icons/fa";
+import { FaSearch, FaUser, FaShoppingCart } from "react-icons/fa";
 import NavbarSkeleton from "./NavbarSkeleton";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const [isOpen, setIsOpen] = useState(false);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -80,10 +82,10 @@ const Navbar = () => {
               isOpen
                 ? "translate-x-0 opacity-100"
                 : "opacity-0 -translate-x-full"
-            } absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between`}
+            } absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between h-[25vh] lg:h-[10%]`}
           >
             <div className="flex flex-col text-gray-600 capitalize dark:text-gray-300 lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
-              <div className="relative mt-4 lg:mt-0  lg:mx-[40%] lg:w-[60rem] ">
+              <div className="relative mt-4 lg:mt-0 lg:mx-[40%] lg:w-[60rem]">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                   <FaSearch className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                 </span>
@@ -95,18 +97,20 @@ const Navbar = () => {
                   placeholder="Search Products"
                 />
               </div>
-              <a
-                href="#"
-                className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200"
-              >
-                Profile
-              </a>
-              <a
-                href="#"
-                className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900 dark:hover:text-gray-200"
-              >
-                Cart
-              </a>
+              <div className="flex items-center mt-2 lg:mt-0 lg:ml-4">
+                <Link
+                  to="/profile"
+                  className="transition-colors duration-300 transform hover:text-gray-900 dark:hover:text-gray-200"
+                >
+                  <FaUser className="w-5 h-5 lg:text-gray-900 text-gray-700 dark:text-gray-300" />
+                </Link>
+                <Link
+                  to="/cart"
+                  className="ml-4 transition-colors duration-300 transform hover:text-gray-900  dark:hover:text-gray-200"
+                >
+                  <FaShoppingCart className="w-5 h-5 lg:text-gray-900 text-gray-700 dark:text-gray-300" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
